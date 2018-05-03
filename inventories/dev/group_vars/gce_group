@@ -1,0 +1,13 @@
+# GCP Authentication information
+service_account_email: 
+credentials_file: ./credential/
+project_id: 
+
+# vpc network
+vpc_name: training-vpc01
+subnet_name: training-vpc02
+ipv4_range: 10.0.1.0/24
+
+# gce instance
+machine_type: n1-standard-1
+image: centos-7
