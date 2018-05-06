@@ -1,6 +1,22 @@
-hosts: localhost
-gather_facts: no
-connection: local
+- hosts: localhost
+  gather_facts: no
+  connection: local
+  roles:
+    - network_create
+    - instance_create
 
-role:
-  - network_create
+- name: Manage new instances
+  hosts: new_instances
+  connection: ssh
+  sudo: True
+  roles:
+    - instance_setup
+
+- hosts: localhost
+  gather_facts: no
+  connection: local
+  roles:
+    - image_create
+    - template_create
+    - instance_group_create
+    - loadbalancer_create

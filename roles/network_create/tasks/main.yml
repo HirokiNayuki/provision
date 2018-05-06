@@ -14,9 +14,10 @@
 - name: create firewall rule (internal)
   gce_net:
     name: "{{ vpc_name }}"
-    fwname: allow-internal
+    fwname: allow-internal-rule-{{ subnet_name }}
     allowed: tcp
-    src_range: ['"{{ ipv4_range }}"']
+    target_tags: allow-internal-{{ subnet_name }}
+    src_range: ["{{ ipv4_range }}"]
     state: present
     project_id: "{{ project_id }}"
     service_account_email: "{{ service_account_email }}"
@@ -25,9 +26,22 @@
 - name: create firewall rule (lb-http)
   gce_net:
     name: "{{ vpc_name }}"
-    fwname: allow-lb-http
+    fwname: allow-lb-http-rule-{{ subnet_name }}
     allowed: tcp:80
+    target_tags: allow-lb-http-{{ subnet_name }}
     src_range: ['130.211.0.0/22','35.191.0.0/16']
+    state: present
+    project_id: "{{ project_id }}"
+    service_account_email: "{{ service_account_email }}"
+    pem_file: "{{ credentials_file }}"
+
+- name: create firewall rule (ssh)
+  gce_net:
+    name: "{{ vpc_name }}"
+    fwname: allow-ssh-rule-{{ subnet_name }}
+    allowed: tcp:22
+    target_tags: allow-ssh-{{ subnet_name }}
+    src_range: ['0.0.0.0/0']
     state: present
     project_id: "{{ project_id }}"
     service_account_email: "{{ service_account_email }}"

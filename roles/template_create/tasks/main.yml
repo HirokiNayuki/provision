@@ -1,0 +1,14 @@
+- name: create instance template
+  gce_instance_template:
+    name: "{{ instance_names }}-template"
+    external_ip: none
+    image: "{{ instance_names }}-image"
+    network: "{{ vpc_name }}"
+    subnetwork: "{{ subnet_name }}"
+    subnetwork_region: asia-northeast1
+    size: "{{ machine_type }}"
+    tags: allow-internal-{{ subnet_name }},allow-lb-http-{{ subnet_name }}
+    state: present
+    service_account_email: "{{ service_account_email }}"
+    pem_file: "{{ credentials_file }}"
+    project_id: "{{ project_id }}"

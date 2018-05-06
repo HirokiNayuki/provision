@@ -1,0 +1,19 @@
+- name: create instance group
+  gce_mig:
+    name: "{{ instance_names }}-group"
+    zone: "{{ zone }}"
+    state: present
+    size: 2
+    template: "{{ instance_names }}-template"
+    named_ports:
+      - name: "{{ instance_names }}-http-port"
+        port: 80
+    autoscaling:
+      enabled: yes
+      name: "{{ instance_names }}-scaler"
+      policy:
+        min_instances: 2
+        max_instances: 4
+    service_account_email: "{{ service_account_email }}"
+    credentials_file: "{{ credentials_file }}"
+    project_id: "{{ project_id }}"

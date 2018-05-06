@@ -1,0 +1,59 @@
+- name: create healthcheck
+  gcp_healthcheck:
+    healthcheck_name: "{{ instance_names }}-healthcheck"
+    healthcheck_type: HTTP
+    port: 80
+    request_path: "/"
+    check_interval: 5
+    timeout: 5
+    healthy_threshold: 2
+    unhealthy_threshold: 2
+    state: present
+    service_account_email: "{{ service_account_email }}"
+    credentials_file: "{{ credentials_file }}"
+    project_id: "{{ project_id }}"
+
+- name: create backend service
+  gcp_backend_service:
+    backend_service_name: "{{ instance_names }}-backend"
+    backends:
+    - instance_group: "{{ instance_names }}-group"
+    healthchecks: "{{ instance_names }}-healthcheck"
+    port_name: "{{ instance_names }}-http-port"
+    timeout: 30
+    protocol: HTTP
+    state: present
+    service_account_email: "{{ service_account_email }}"
+    credentials_file: "{{ credentials_file }}"
+    project_id: "{{ project_id }}"
+ 
+- name: create url map
+  gcp_url_map:
+    default_service: "{{ instance_names }}-backend"
+    url_map_name: "{{ instance_names }}-url-map"
+    state: present
+    service_account_email: "{{ service_account_email }}"
+    credentials_file: "{{ credentials_file }}"
+    project_id: "{{ project_id }}"
+
+- name: create taerget proxy
+  gcp_target_proxy:
+    target_proxy_name: "{{ instance_names }}-target-proxy"
+    target_proxy_type: HTTP
+    url_map_name: "{{ instance_names }}-url-map"
+    state: present
+    service_account_email: "{{ service_account_email }}"
+    credentials_file: "{{ credentials_file }}"
+    project_id: "{{ project_id }}"
+
+- name: create global forwarding rule
+  gcp_forwarding_rule:
+    forwarding_rule_name: "{{ instance_names }}-forwarding-rule"
+    protocol: TCP
+    port_range: 80
+    region: global
+    target: "{{ instance_names }}-target-proxy"
+    state: present
+    service_account_email: "{{ service_account_email }}"
+    credentials_file: "{{ credentials_file }}"
+    project_id: "{{ project_id }}"

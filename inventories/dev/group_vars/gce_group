@@ -1,13 +1,16 @@
 # GCP Authentication information
-service_account_email: 
-credentials_file: ./credential/
-project_id: 
+service_account_email: [service_account_name]
+credentials_file: ./credential/sandbox.json
+project_id: sandbox-training-[number]
 
 # vpc network
-vpc_name: training-vpc01
-subnet_name: training-vpc02
-ipv4_range: 10.0.1.0/24
+vpc_name: training-vpc[number]
+subnet_name: training-vpc[number]]
+ipv4_range: 10.0.x.0/24
 
 # gce instance
+instance_names: base-instance-[number]
 machine_type: n1-standard-1
+disk_size: 10
 image: centos-7
+zone: asia-northeast1-a
