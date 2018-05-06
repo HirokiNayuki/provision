@@ -1,9 +1,3 @@
 - name: install nginx
-  yum:
-    name: nginx
-    state: latest
 
 - name: enable nginx
-  systemd:
-    name: nginx
-    enabled: yes
