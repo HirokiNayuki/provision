@@ -5,7 +5,7 @@ project_id: sandbox-training-[number]
 
 # vpc network
 vpc_name: training-vpc[number]
-subnet_name: training-vpc[number]]
+subnet_name: training-vpc[number]
 ipv4_range: 10.0.x.0/24
 
 # gce instance
